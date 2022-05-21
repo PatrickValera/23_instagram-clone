@@ -13,17 +13,17 @@ const Header = () => {
     e.stopPropagation()
     setAnchor(e.currentTarget)
   }
-  const handleClose = () =>{
+  const handleClose = () => {
     console.log('UH OH')
     setAnchor(null)
   }
-  useEffect(()=>{
+  useEffect(() => {
     console.log('header')
 
-  },[])
+  }, [])
   return (
     <>
-      <header className=' p-2 border-b-[1px] bg-white fixed top-0 w-full'>
+      <header className=' px-2 py-3 border-b-[1px] bg-white fixed top-0 w-full'>
 
         <div className='max-w-screen-md flex mx-auto items-center'>
           <div className='basis-1/3 flex h-[25px]'>
@@ -35,23 +35,23 @@ const Header = () => {
           </div>
 
           <div className='basis-1/3 flex justify-end text-xl gap-4'>
-            <i><AiFillHome /></i>
-            <i><RiMessengerLine /></i>
-            <i><BsPlusSquare /></i>
-            <i><AiOutlineCompass /></i>
+            <i onClick={handleClick} ><AiFillHome /></i>
+            <i onClick={handleClick} ><RiMessengerLine /></i>
+            <i onClick={handleClick} ><BsPlusSquare /></i>
+            <i onClick={handleClick} ><AiOutlineCompass /></i>
             <i onClick={handleClick} ><AiOutlineHeart /></i>
 
           </div>
         </div>
 
       </header>
-      <div className='h-[50px]'/>
+      <div className='h-[50px]' />
       <Menu element={anchor} open={open} onClose={handleClose}>
-        <li>This account started following you</li>
-        <li>This account started following you</li>
-        <li>This account started following you</li>
-        
-        </Menu>
+        <li className='list-none'>This account started following you</li>
+        <li className='list-none'>This account started following you</li>
+        <li className='list-none'>This account started following you</li>
+
+      </Menu>
     </>
   )
 }

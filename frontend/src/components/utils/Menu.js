@@ -1,45 +1,48 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
-const Menu = ({ element, children, onClose: close }) => {
-
+const Menu = ({ element, children, onClose: close, center }) => {
     const [top, setTop] = useState(0)
     const [left, setLeft] = useState(0)
+    const [visible, setVisible] = useState(false)
     const box = useRef()
-    const handleClose = () => {
-        close()
-    }
 
-
-    useEffect(() => {
-        if (element) {
-            console.log(element)
-            let { top, left } = element.getBoundingClientRect()
-            setTop(top + element.offsetHeight + 10)
-            setLeft(left - box.current.offsetWidth / 2)
-        }
+    const childrenWidth = useMemo(() => {
+        if (element) return box.current.offsetWidth
+        else return 0
     }, [element])
-
     useEffect(() => {
-        function handleClose() {
-            console.log('closing')
-            close()
-        }
         if (element) {
+            function handleClose() {
+                console.log('closing')
+                setVisible(false)
+                setTimeout(() => {
+                    setTop(top)
+                    setLeft(left)
+                    close()
+                }, 250)
+            }
+
+            let { top: up, left: side } = element.getBoundingClientRect()
+            setTop(up + element.offsetHeight + 10)
+            setLeft(side)
             document.addEventListener('click', handleClose)
-            console.log('add')
         }
+
         return (() => {
-            console.log('remove')
             document.removeEventListener('click', handleClose)
         })
     }, [element])
 
     useEffect(() => {
-        console.log("UE")
-    }, [])
+        if (top) setVisible(true)
+    }, [top])
     return (
-        <div ref={box} className={`fixed bg-gray-200 rounded p-2 ${element ? 'block' : 'hidden'}`} style={{ left: `${left}px`, top: `${top}px` }}>
-            {children}
+        <div ref={box} className={`fixed drop-shadow-lg border rounded bg-gray-100 translate-x-[-80%] transition-all z-10  `} style={{ left: `${left}px`, top: `${top}px`, opacity: `${visible ? '1' : '0'}` }}>
+            <div className='w-4 h-4 bg-gray-100 absolute left-[80%] rotate-45 top-[-.3rem]'></div>
+            <div className='p-2'>
+                {children}
+
+            </div>
         </div>
     )
 }
