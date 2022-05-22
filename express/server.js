@@ -1,22 +1,21 @@
 const express = require('express')
 const expressGraphQL = require('express-graphql')
-const {
-  GraphQLSchema,
-  GraphQLObjectType,
-  GraphQLString,
-  GraphQLList,
-  GraphQLInt,
-  GraphQLNonNull
-} = require('graphql')
+const connectDB = require('./dbconfig/db.js')
+const dotenv=require('dotenv')
 const schema = require('./schema/schema.js')
+const authenticate = require('./middleware/authenticate.js')
 const app = express()
 
+dotenv.config()
 
+connectDB()
 
+app.use(authenticate)
 app.use('/graphql', expressGraphQL.graphqlHTTP({
   schema: schema,
   graphiql: true
 }))
+
 app.listen(5000, () => console.log('Server Running'))
 
 
